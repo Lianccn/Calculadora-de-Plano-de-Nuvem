@@ -1,26 +1,40 @@
 ﻿namespace Calculadora_de_Plano_de_Nuvem.Models
 {
+    public enum SistemaOperacional
+    {
+        Windows,
+        Linux
+    }
+
+    public enum TipoRaid
+    {
+        Nenhum,
+        Raid0,
+        Raid1,
+        Raid5,
+        Raid10
+    }
+
     public class Servidor
     {
-            public int Id { get; set; }
-            public int Ip { get; set; }
-            public string Cpu { get; set; }
-            public string Memoria { get; set; }
-            public string Armazenamento { get; set; }
-            public string Raid { get; set; }
-            public string LicencaSistema { get; set; }
-            public string SistemaOperacional { get; set; }
-
-
+        public int Id { get; set; }
+        public string Ip { get; set; } = string.Empty;
+        public int Cpu { get; set; }
+        public int MemoriaGb { get; set; }
+        public int ArmazenamentoGb { get; set; }
+        public TipoRaid Raid { get; set; }
+        public bool LicencaSistema { get; set; }
+        public SistemaOperacional SistemaOperacional { get; set; }
     }
+
     public class ServidorNuvem : Servidor
     {
-        public string Nuvem { get; set; }
+        public string TipoNuvem { get; set; } = string.Empty;
     }
 
     public class ServidorFisico : Servidor
     {
-        public string FonteAlimentacao { get; set; }
-        public string ManutencaoPreventiva { get; set; }
+        public string FonteAlimentacao { get; set; } = string.Empty;
+        public bool ManutencaoPreventiva { get; set; }
     }
 }
