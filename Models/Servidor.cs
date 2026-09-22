@@ -1,4 +1,6 @@
-﻿namespace Calculadora_de_Plano_de_Nuvem.Models
+﻿using System.Net;
+
+namespace Calculadora_de_Plano_de_Nuvem.Models
 {
     public enum SistemaOperacional
     {
@@ -18,7 +20,7 @@
     public class Servidor
     {
         public int Id { get; set; }
-        public string Ip { get; set; } = string.Empty;
+        public IPAddress Ip { get; set; } 
         public int Cpu { get; set; }
         public int MemoriaGb { get; set; }
         public int ArmazenamentoGb { get; set; }
