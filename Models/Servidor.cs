@@ -17,7 +17,7 @@ namespace Calculadora_de_Plano_de_Nuvem.Models
         Raid10
     }
 
-    public class Servidor
+    public class Servidores
     {
         public int Id { get; set; }
         public IPAddress Ip { get; set; } 
@@ -29,12 +29,12 @@ namespace Calculadora_de_Plano_de_Nuvem.Models
         public SistemaOperacional SistemaOperacional { get; set; }
     }
 
-    public class ServidorNuvem : Servidor
+    public class ServidorNuvem : Servidores
     {
         public string TipoNuvem { get; set; } = string.Empty;
     }
 
-    public class ServidorFisico : Servidor
+    public class ServidorFisico : Servidores
     {
         public string FonteAlimentacao { get; set; } = string.Empty;
         public bool ManutencaoPreventiva { get; set; }
