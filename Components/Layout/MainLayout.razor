@@ -1,23 +1,27 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="/">
+            <span class="brand-mark">☁</span>
+            <span class="brand-name">Cloud Cost<br /><strong>Calculator</strong></span>
+        </a>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <nav class="side-nav">
+            <NavLink href="/" Match="NavLinkMatch.All"><span class="nav-icon">⌂</span>Início</NavLink>
+            <NavLink href="/calculadora-nuvem"><span class="nav-icon">☁</span>Calculadora Nuvem</NavLink>
+            <NavLink href="/calculadora-fisico"><span class="nav-icon">▣</span>Calculadora Físico</NavLink>
+            <NavLink href="/sobre"><span class="nav-icon">ⓘ</span>Sobre</NavLink>
+        </nav>
+
+        <div class="sidebar-promo">
+            <div class="promo-bars">▂ ▅ ▇</div>
+            <h3>Planeje hoje<br />o futuro da sua infraestrutura.</h3>
+            <p>Compare custos, tome decisões melhores e evolua com segurança.</p>
         </div>
+    </aside>
 
-        <article class="content px-4">
-            @Body
-        </article>
+    <main class="main-area">
+        @Body
     </main>
-</div>
-
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
 </div>

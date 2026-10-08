@@ -25,7 +25,6 @@
         public string SistemaOperacional { get; set; } = string.Empty;
         public int LarguraBanda { get; set; }
         public bool ExisteBackup { get; set; }
-
         public FrequenciaBakup FrequenciaBakup { get; set; }
         public PeriodoUso TempoUso { get; set; }
         public int IdProcessador { get; set; }
