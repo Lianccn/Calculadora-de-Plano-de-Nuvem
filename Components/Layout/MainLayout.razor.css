@@ -1,5 +1,25 @@
-.app-shell{min-height:100vh;display:grid;grid-template-columns:252px minmax(0,1fr);background:#031321;color:#edf5ff}
-.sidebar{position:sticky;top:0;height:100vh;min-height:700px;padding:24px 22px 22px;background:linear-gradient(180deg,#03101d,#021a2a);border-right:1px solid #12344d;display:flex;flex-direction:column}
+.app-shell
+{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:252px minmax(0,1fr);
+    background:#031321;color:#edf5ff
+
+}
+
+.sidebar
+{
+    position:sticky;
+    top:0;
+    height:100vh;
+    min-height:700px;
+    padding:24px 22px 22px;
+    background:linear-gradient(180deg,#03101d,#021a2a);
+    border-right:1px solid #12344d;
+    display:flex;
+    flex-direction:column
+
+}
 .brand{display:flex;align-items:center;gap:12px;color:#f5f9ff;text-decoration:none;margin-bottom:42px}
 .brand-mark{font-size:48px;line-height:1;color:#14b9ff;text-shadow:0 0 22px #087bcf}
 .brand-name{font-size:20px;font-weight:700;line-height:1.05;letter-spacing:-.4px}.brand-name strong{color:#19bfff}
@@ -10,4 +30,68 @@
 .sidebar-promo{margin-top:auto;border:1px solid #16466a;border-radius:16px;padding:20px;background:linear-gradient(145deg,#061e34,#031322);box-shadow:0 10px 35px #0003}
 .promo-bars{font-size:28px;letter-spacing:-5px;color:#17bfff;margin-bottom:12px}.sidebar-promo h3{font-size:17px;line-height:1.25;color:#36caff;margin:0 0 12px}.sidebar-promo p{font-size:13px;line-height:1.6;color:#b8cce3;margin:0}
 .main-area{min-width:0;padding:28px 30px 34px;background:radial-gradient(ellipse at 80% 5%,#072641 0,transparent 40%),#031321}
-@media(max-width:900px){.app-shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto;min-height:0;padding:14px 18px;border-right:0;border-bottom:1px solid #12344d}.brand{margin-bottom:14px}.brand-mark{font-size:34px}.brand-name{font-size:17px}.side-nav{flex-direction:row;flex-wrap:wrap;gap:5px}.side-nav a{font-size:12px;padding:8px}.sidebar-promo{display:none}.main-area{padding:20px 14px}}
+
+@media(max-width:900px)
+{
+    .app-shell
+    {
+        grid-template-columns:1fr
+
+    }
+
+    .sidebar
+    {
+     position:relative;
+     height:auto;
+     min-height:0;
+     padding:14px 18px;
+     border-right:0;
+     border-bottom:1px solid #12344d
+
+    }
+
+    .brand
+    {
+        margin-bottom:14px
+
+    }
+
+    .brand-mark
+    {
+        font-size:34px
+
+    }
+
+    .brand-name
+    {
+        font-size:17px
+
+    }
+
+    .side-nav
+    {
+        flex-direction:row;
+        flex-wrap:wrap;gap:5px
+
+    }
+
+    .side-nav a
+    {
+        font-size:12px;
+        padding:8px
+
+    }
+
+    .sidebar-promo
+    {
+        display:none
+
+    }
+    .main-area
+    {
+        padding:20px 14px
+
+    }
+
+}
+
