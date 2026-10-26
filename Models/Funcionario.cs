@@ -3,9 +3,9 @@
     public class Funcionario
     {
         public int Id { get; set; }
-        public int IdUsuario { get; set; }
+        public int UsuarioId { get; set; }
         public string Cargo { get; set; } = string.Empty;
-        public Usuario Usuario { get; set; } = null;
+        public Usuario Usuario { get; set; } = null!;
 
     }
 }

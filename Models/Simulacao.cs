@@ -12,9 +12,9 @@
         public int Id { get; set; }
         public DateTime DataSimulacao { get; set; }
         public PeriodoUso PeriodoUso { get; set; }
-        public int IdCliente { get; set; }
-        public Cliente Cliente { get; set; } = null;
+        public int ClienteId { get; set; }
+        public Cliente Cliente { get; set; } = null!;
         public List<InfraAtual> InfraestruturasAtuais { get; set; } = new();
-        public List<Solucao> Solucoes { get; set; } = new();
+        public Solucao? Solucao { get; set; }
     }
 }

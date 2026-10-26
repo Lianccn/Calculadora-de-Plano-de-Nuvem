@@ -8,7 +8,7 @@
         public decimal CustoArmazenamento { get; set; }
         public decimal CustoInternet { get; set; }
         public decimal CustoTotal { get; set; }
-        public int IdInfraFisico { get; set; }
+        public int InfraFisicoId { get; set; }
         public InfraFisico InfraFisico { get; set; } = null!;
     }
 }

@@ -1,5 +1,9 @@
 ﻿namespace Calculadora_de_Plano_de_Nuvem.Models
 {
+    public enum TipoArmazenamentoFisico{
+        Hd,
+        Ssd,
+    }
     public enum TipoRaid
     {
         Raid0,
@@ -13,11 +17,11 @@
     public class ArmazenamentoFisico
     {
         public int Id { get; set; }
-        public TipoArmazenamento Tipo { get; set; }
+        public TipoArmazenamentoFisico Tipo { get; set; }
         public int CapacidadeTotal { get; set; }
-        public string QuantidadeDiscos { get; set; } = string.Empty;
+        public int QuantidadeDiscos { get; set; }
         public TipoRaid? Raid { get; set; }
-        public int IdInfraFisico { get; set; }
+        public int InfraFisicoId { get; set; }
         public InfraFisico InfraFisico { get; set; } = null!;
     }
 }

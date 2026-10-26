@@ -1,11 +1,5 @@
 ﻿namespace Calculadora_de_Plano_de_Nuvem.Models
 {
-    public enum TipoUsuario
-    {
-        Cliente,
-        Administrador
-    }
-
     public class Usuario
     {
         public int Id { get; set; }

@@ -7,6 +7,6 @@
         public int Nucleos { get; set; }
         public int Threads { get; set; }
         public List<InfraAtual> InfraestruturasAtuais { get; set; } = new();
-        public List<InfraFisico> InfraestruturaFisicas { get; set; } = new();
+        public List<InfraFisico> InfraestruturasFisicas { get; set; } = new();
     }
 }

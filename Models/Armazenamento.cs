@@ -11,8 +11,8 @@
         public int Id { get; set; }
         public TipoArmazenamento Tipo { get; set; }
         public int CapacidadeTotal { get; set; }
-        public string QuantidadeDiscos { get; set; } = string.Empty;
-        public int IdInfraAtual { get; set; }
+        public int QuantidadeDiscos { get; set; } 
+        public int InfraAtualId { get; set; }
         public InfraAtual InfraAtual { get; set; } = null!;
     }
 }

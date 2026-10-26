@@ -6,12 +6,6 @@
         FonteRedundante
     }
 
-    public enum TipoNobreak
-    {
-        Sim,
-        Nao
-    }
-
     public enum SuporteManutencao
     {
         Semanal,
@@ -30,13 +24,13 @@
         public string Modelo { get; set; } = string.Empty;
         public int Memoria { get; set; }
         public TipoAlimentacao Alimentacao { get; set; }
-        public TipoNobreak Nobreak { get; set; }
+        public bool Nobreak { get; set; }
         public string LicencaSistema { get; set; } = string.Empty;
         public SuporteManutencao? SuporteManutencao { get; set; }
-        public int IdProcessador { get; set; }
+        public int ProcessadorId { get; set; }
         public Processador Processador { get; set; } = null!;
         public List<ArmazenamentoFisico> Armazenamentos { get; set; } = new();
         public CustoFisico? CustoFisico { get; set; }
-        public List<Solucao> Solucoes { get; set; } = new();
+        public Solucao? Solucao { get; set; }
     }
 }

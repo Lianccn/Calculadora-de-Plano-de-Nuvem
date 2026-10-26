@@ -3,11 +3,11 @@
     public class Solucao
     {
         public int Id { get; set; }
-        public int IdSimulacao { get; set; }
+        public int SimulacaoId { get; set; }
         public Simulacao Simulacao { get; set; } = null!;
-        public int IdInfraNuvem { get; set; }
+        public int InfraNuvemId { get; set; }
         public InfraNuvem InfraNuvem { get; set; } = null!;
-        public int IdInfraFisico { get; set; }
+        public int InfraFisicoId { get; set; }
         public InfraFisico InfraFisico { get; set; } = null!;
     }
 }

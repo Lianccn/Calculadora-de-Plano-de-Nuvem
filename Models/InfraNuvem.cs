@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Calculadora_de_Plano_de_Nuvem.Models
+﻿namespace Calculadora_de_Plano_de_Nuvem.Models
 {
     
     public class InfraNuvem
@@ -13,6 +11,6 @@ namespace Calculadora_de_Plano_de_Nuvem.Models
         public int TransferenciaBanda { get; set; }
         public string SistemaOperacional { get; set; } = string.Empty;
         public CustoNuvem? CustoNuvem { get; set; }
-        public List<Solucao> Solucoes { get; set; } = new();
+        public Solucao? Solucao { get; set; }
     }
 }

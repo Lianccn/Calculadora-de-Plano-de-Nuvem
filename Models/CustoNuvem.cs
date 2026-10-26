@@ -10,7 +10,7 @@
         public decimal CustoBanda { get; set; }
         public decimal CustoSistemaOperacional { get; set; }
         public decimal CustoMensal { get; set; }
-        public int IdInfraNuvem { get; set; }
+        public int InfraNuvemId { get; set; }
         public InfraNuvem InfraNuvem { get; set; } = null!;
     }
 }

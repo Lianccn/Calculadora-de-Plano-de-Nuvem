@@ -6,14 +6,13 @@
         Desktop,
         Notebook
     }
-    public enum FrequenciaBakup
+    public enum FrequenciaBackup
     {
         Diario,
         Semanal,
         Mensal,
         Quinzenal,
-        Anual,
-        NaoTem
+        Anual
     }
     public class InfraAtual
     {
@@ -25,11 +24,11 @@
         public string SistemaOperacional { get; set; } = string.Empty;
         public int LarguraBanda { get; set; }
         public bool ExisteBackup { get; set; }
-        public FrequenciaBakup FrequenciaBakup { get; set; }
+        public FrequenciaBackup? FrequenciaBackup { get; set; }
         public PeriodoUso TempoUso { get; set; }
-        public int IdProcessador { get; set; }
+        public int ProcessadorId { get; set; }
         public Processador Processador { get; set; } = null!;
-        public int IdSimulacao { get; set; }
+        public int SimulacaoId { get; set; }
         public Simulacao Simulacao { get; set; } = null!;
         public List<Armazenamento> Armazenamentos { get; set; } = new();
 
