@@ -1,0 +1,44 @@
+@page "/calculadora-nuvem"
+<PageTitle>Calculadora Nuvem</PageTitle>
+<div class="calc-page">
+    <header class="calc-header"><div><h1 class="page-heading">Custo mensal na nuvem</h1><p class="page-subtitle">Configure os recursos e veja uma estimativa de custo em tempo real.</p></div><span class="status-pill"><i></i> Simulação</span></header>
+    <div class="cloud-grid">
+        <section class="panel config-panel">
+            <div class="panel-title"><div><h2>Configuração</h2><p>Ajuste os recursos conforme sua necessidade.</p></div><span class="title-icon">☁</span></div>
+            <div class="range-field"><div class="range-head"><label>vCPU (núcleos)</label><strong>@cpu</strong></div><input type="range" min="1" max="32" step="1" @bind="cpu" /><div class="range-labels"><span>1</span><span>4</span><span>8</span><span>16</span><span>32</span></div></div>
+            <div class="range-field"><div class="range-head"><label>Memória RAM (GB)</label><strong>@ram GB</strong></div><input type="range" min="2" max="128" step="2" @bind="ram" /><div class="range-labels"><span>2</span><span>8</span><span>16</span><span>32</span><span>128</span></div></div>
+            <div class="range-field"><div class="range-head"><label>Armazenamento (GB)</label><strong>@storage GB</strong></div><input type="range" min="50" max="2000" step="50" @bind="storage" /><div class="range-labels"><span>50</span><span>250</span><span>500</span><span>1 TB</span><span>2 TB</span></div></div>
+            <div class="range-field"><div class="range-head"><label>Backup (GB)</label><strong>@backup GB</strong></div><input type="range" min="0" max="1000" step="25" @bind="backup" /><div class="range-labels"><span>0</span><span>100</span><span>250</span><span>500</span><span>1 TB</span></div></div>
+            <div class="range-field"><div class="range-head"><label>Transferência mensal (TB)</label><strong>@transfer TB</strong></div><input type="range" min="1" max="50" step="1" @bind="transfer" /><div class="range-labels"><span>1</span><span>5</span><span>10</span><span>20</span><span>50</span></div></div>
+            <div class="field os-field"><label>Sistema operacional</label><select class="control" @bind="os"><option>Linux</option><option>Windows Server</option></select></div>
+        </section>
+        <aside class="panel summary-panel">
+            <h2>Resumo</h2><p class="muted">Estimativa dos recursos selecionados.</p>
+            <div class="summary-table">
+                <div><span>vCPU (@cpu núcleos)</span><strong>@Money(cpu * 15)</strong></div>
+                <div><span>Memória RAM (@ram GB)</span><strong>@Money(ram * 3)</strong></div>
+                <div><span>Armazenamento (@storage GB)</span><strong>@Money(storage * .20)</strong></div>
+                <div><span>Backup (@backup GB)</span><strong>@Money(backup * .12)</strong></div>
+                <div><span>Transferência (@transfer TB)</span><strong>@Money(transfer * 8)</strong></div>
+                <div><span>Sistema operacional</span><strong>@Money(os == "Windows Server" ? 150 : 0)</strong></div>
+            </div>
+            <div class="total-row"><span>Total mensal</span><strong>@Money(total)</strong></div>
+            <div class="total-box"><span>Custo estimado em 12 meses</span><strong>@Money(total * 12)</strong></div>
+            <button class="btn btn-primary full" @onclick="Reset">Restaurar configuração <span>↺</span></button>
+            <p class="disclaimer">ⓘ Valores ilustrativos para fins acadêmicos. Não representam cotação de provedores.</p>
+        </aside>
+    </div>
+</div>
+@code {
+    private int cpu = 4, ram = 16, storage = 200, backup = 100, transfer = 10;
+    private string os = "Linux";
+    private decimal total => cpu * 15m + ram * 3m + (decimal)storage * .20m + (decimal)backup * .12m + transfer * 8m + (os == "Windows Server" ? 150m : 0m);
+    private static string Money(decimal value) => value.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
+    private void Reset() { cpu = 4; ram = 16; storage = 200; backup = 100; transfer = 10; os = "Linux"; }
+}
+<style>
+.calc-page{max-width:1450px;margin:auto}.calc-header{display:flex;align-items:center;justify-content:space-between;margin:4px 0 24px}.status-pill{font-size:12px;color:#7fe4ff;border:1px solid #165576;padding:8px 12px;border-radius:30px}.status-pill i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#20d8a4;margin-right:7px}
+.cloud-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.8fr);gap:20px;align-items:start}.config-panel,.summary-panel{padding:24px}.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.panel-title h2,.summary-panel h2{font-size:19px;margin:0 0 5px}.panel-title p,.muted{margin:0;color:#9eb3cc;font-size:12px}.title-icon{font-size:36px;color:#1bcaff}.range-field{margin:0 0 24px}.range-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.range-head label,.os-field label{font-size:13px;color:#d9e9fa}.range-head strong{border:1px solid #24516e;background:#061d30;padding:5px 11px;border-radius:8px;color:#4bd5ff;min-width:75px;text-align:center}
+input[type=range]{width:100%;accent-color:#16c9f4;cursor:pointer}.range-labels{display:flex;justify-content:space-between;font-size:10px;color:#8ea8c2;margin-top:4px}.os-field{margin-top:4px}.os-field select{margin-top:8px}.summary-panel{position:sticky;top:20px}.summary-table{margin-top:23px}.summary-table div{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #18374e;font-size:12px}.summary-table span{color:#a9bfd7}.summary-table strong{font-weight:500;white-space:nowrap}.total-row{display:flex;justify-content:space-between;align-items:center;padding:20px 0 16px;border-bottom:1px solid #1b405b}.total-row strong{font-size:27px;color:#25d5f8}.total-box{margin:16px 0 20px;border:1px solid #1682ad;border-radius:12px;padding:16px;background:linear-gradient(120deg,#052b43,#061d32)}.total-box span{display:block;font-size:12px;color:#a8c4dc}.total-box strong{display:block;font-size:25px;color:#20d4fa;margin-top:5px}.full{width:100%}.disclaimer{font-size:10px;line-height:1.5;color:#829bb5;margin:14px 0 0}
+@media(max-width:1000px){.cloud-grid{grid-template-columns:1fr}.summary-panel{position:static}}@media(max-width:600px){.calc-header{align-items:flex-start;gap:12px;flex-direction:column}.config-panel,.summary-panel{padding:17px}.page-heading{font-size:25px}}
+</style>

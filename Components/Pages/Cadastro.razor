@@ -1,0 +1,60 @@
+@page "/cadastro"
+<PageTitle>Criar conta - Cloud Cost Calculator</PageTitle>
+<div class="register-page">
+    <div class="register-main">
+        <header class="register-heading"><h1 class="page-heading">Criar conta</h1><p class="page-subtitle">Cadastre sua empresa e informe a configuração do seu servidor atual<br class="desktop-break" /> para começarmos a simulação.</p></header>
+        <EditForm Model="form" OnValidSubmit="Continue">
+            <section class="panel register-section">
+                <div class="section-head"><span class="step-number">1</span><div><h2>Dados da empresa e responsável</h2><p>Informe os dados básicos para criar sua conta.</p></div></div>
+                <div class="grid-2">
+                    <div class="field"><label>Nome da empresa <span class="required">*</span></label><input class="control" @bind="form.Empresa" placeholder="Ex.: Minha Empresa Ltda." required /></div>
+                    <div class="field"><label>CNPJ <span class="required">*</span></label><input class="control" @bind="form.Cnpj" placeholder="00.000.000/0000-00" required /></div>
+                    <div class="field"><label>Nome do responsável <span class="required">*</span></label><input class="control" @bind="form.Responsavel" placeholder="Ex.: João Silva" required /></div>
+                    <div class="field"><label>E-mail <span class="required">*</span></label><input class="control" type="email" @bind="form.Email" placeholder="exemplo@empresa.com" required /></div>
+                    <div class="field"><label>Telefone <span class="required">*</span></label><input class="control" type="tel" @bind="form.Telefone" placeholder="(11) 90000-0000" required /></div>
+                    <div class="field"><label>Cargo</label><input class="control" @bind="form.Cargo" placeholder="Ex.: Gerente de TI" /></div>
+                    <div class="field"><label>Senha <span class="required">*</span></label><input class="control" type="password" @bind="form.Senha" placeholder="Crie uma senha" required minlength="8" /></div>
+                    <div class="field"><label>Confirmar senha <span class="required">*</span></label><input class="control" type="password" @bind="confirmPassword" placeholder="Repita a senha" required minlength="8" /></div>
+                </div>
+            </section>
+            <section class="panel register-section">
+                <div class="section-head"><span class="step-number">2</span><div><h2>Configuração do servidor atual</h2><p>Informe as principais características do servidor que sua empresa utiliza hoje.</p></div></div>
+                <div class="grid-2">
+                    <div class="field"><label>Fabricante</label><select class="control" @bind="form.Fabricante"><option>Dell</option><option>HPE</option><option>Lenovo</option><option>Outro</option></select></div>
+                    <div class="field"><label>Modelo</label><input class="control" @bind="form.Modelo" placeholder="Ex.: PowerEdge T340" /></div>
+                    <div class="field"><label>Processador (CPU)</label><input class="control" @bind="form.Processador" placeholder="Ex.: Intel Xeon E-2236" /></div>
+                    <div class="field triple"><label>Núcleos</label><select class="control" @bind="form.Nucleos"><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option><option>32</option></select><label>Threads</label><select class="control" @bind="form.Threads"><option>4</option><option>8</option><option>12</option><option>16</option><option>24</option><option>32</option><option>64</option></select></div>
+                    <div class="field"><label>Memória RAM</label><select class="control" @bind="form.Ram"><option>8 GB</option><option>16 GB</option><option>32 GB</option><option>64 GB</option><option>128 GB</option><option>256 GB</option></select></div>
+                    <div class="field"><label>Tipo de armazenamento</label><select class="control" @bind="form.TipoArmazenamento"><option>SSD</option><option>HDD</option><option>NVMe</option></select></div>
+                    <div class="field"><label>Capacidade total</label><select class="control" @bind="form.Capacidade"><option>500 GB</option><option>1 TB</option><option>2 TB</option><option>4 TB</option><option>8 TB</option></select></div>
+                    <div class="field"><label>Quantidade de discos</label><select class="control" @bind="form.Discos"><option>1</option><option>2</option><option>4</option><option>8</option></select></div>
+                    <div class="field"><label>RAID (se houver)</label><select class="control" @bind="form.Raid"><option>Não possui</option><option>RAID 0</option><option>RAID 1</option><option>RAID 5</option><option>RAID 10</option></select></div>
+                    <div class="field"><label>Sistema operacional</label><select class="control" @bind="form.Sistema"><option>Windows Server</option><option>Linux</option><option>Outro</option></select></div>
+                    <div class="field"><label>Largura de banda / Internet</label><select class="control" @bind="form.Banda"><option>100 Mbps</option><option>300 Mbps</option><option>500 Mbps</option><option>1 Gbps</option><option>2 Gbps</option></select></div>
+                    <div class="field"><label>Possui backup?</label><select class="control" @bind="form.Backup"><option>Sim</option><option>Não</option></select></div>
+                    <div class="field"><label>Frequência do backup</label><select class="control" @bind="form.FrequenciaBackup"><option>Diário</option><option>Semanal</option><option>Mensal</option><option>Não possui</option></select></div>
+                    <div class="field"><label>Tempo de uso do equipamento</label><select class="control" @bind="form.TempoUso"><option>Menos de 1 ano</option><option>1 a 3 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
+                </div>
+            </section>
+            @if (!string.IsNullOrWhiteSpace(message)) { <p class="form-message">@message</p> }
+            <div class="register-actions"><a class="btn btn-ghost" href="/">Cancelar</a><button class="btn btn-primary" type="submit">Continuar <span>→</span></button></div>
+        </EditForm>
+    </div>
+    <aside class="register-aside"><div class="hero-server"><div class="server-art"><i></i><i></i><i></i><b></b></div><div class="cloud-art">☁</div></div><h2>Transforme sua infraestrutura em oportunidades.</h2><p>Com base nas informações do seu servidor atual, vamos recomendar o melhor plano em nuvem e mostrar o comparativo completo de custos.</p><div class="benefit"><span>ϟ</span><div><b>Rápido e simples</b><p>Leva apenas alguns minutos para se cadastrar.</p></div></div><div class="benefit"><span>♢</span><div><b>Seus dados seguros</b><p>Proteja suas informações com boas práticas de segurança.</p></div></div><div class="benefit"><span>▥</span><div><b>Decisões mais inteligentes</b><p>Compare custos e planeje o futuro da sua empresa.</p></div></div></aside>
+</div>
+@code {
+    private RegistrationForm form = new();
+    private string confirmPassword = "";
+    private string message = "";
+    private void Continue() {
+        message = form.Senha != confirmPassword ? "As senhas não conferem." : "Dados validados visualmente. A integração com cadastro e banco de dados ainda precisa ser implementada.";
+    }
+    private sealed class RegistrationForm {
+        public string Empresa { get; set; } = ""; public string Cnpj { get; set; } = ""; public string Responsavel { get; set; } = ""; public string Email { get; set; } = ""; public string Telefone { get; set; } = ""; public string Cargo { get; set; } = ""; public string Senha { get; set; } = "";
+        public string Fabricante { get; set; } = "Dell"; public string Modelo { get; set; } = ""; public string Processador { get; set; } = ""; public string Nucleos { get; set; } = "6"; public string Threads { get; set; } = "12"; public string Ram { get; set; } = "32 GB"; public string TipoArmazenamento { get; set; } = "SSD"; public string Capacidade { get; set; } = "1 TB"; public string Discos { get; set; } = "2"; public string Raid { get; set; } = "RAID 1"; public string Sistema { get; set; } = "Windows Server"; public string Banda { get; set; } = "500 Mbps"; public string Backup { get; set; } = "Sim"; public string FrequenciaBackup { get; set; } = "Diário"; public string TempoUso { get; set; } = "1 a 3 anos";
+    }
+}
+<style>
+.register-page{max-width:1600px;margin:auto;display:grid;grid-template-columns:minmax(600px,1fr) 250px;gap:28px}.register-heading{margin-bottom:18px}.register-heading .page-heading{font-size:28px}.register-section{padding:17px 19px;margin-bottom:14px}.register-section .section-head{margin-bottom:17px}.register-section .grid-2{gap:15px 22px}.register-section .control{height:38px;font-size:12px}.register-section .field label{font-size:12px}.triple{display:grid;grid-template-columns:1fr .65fr .65fr;align-items:end;gap:7px}.triple label{grid-row:1}.triple select{grid-row:2}.register-actions{display:flex;justify-content:space-between;margin-top:12px}.register-actions .btn{min-width:145px}.register-aside{padding-top:30px;max-width:290px}.hero-server{height:265px;position:relative;display:grid;place-items:center;background:radial-gradient(ellipse,#06345a,transparent 70%)}.hero-server .server-art{transform:scale(.78) skewY(-7deg)}.hero-server .cloud-art{position:absolute;font-size:83px;right:0;bottom:14px;color:#0bbfff;text-shadow:0 0 28px #087dff}.register-aside>h2{font-size:23px;line-height:1.25;color:#24c8fa;margin:10px 0}.register-aside>p{color:#b7cbe1;line-height:1.6;font-size:13px}.benefit{display:flex;gap:13px;align-items:flex-start;border-top:1px solid #1a3d56;padding:17px 0}.benefit>span{width:44px;height:44px;flex:0 0 44px;border:1px solid #165b83;border-radius:50%;display:grid;place-items:center;color:#1dc9ff;font-size:24px}.benefit b{color:#2bcaff;font-size:12px}.benefit p{margin:5px 0 0;font-size:11px;line-height:1.5;color:#a9bfd7}.form-message{font-size:12px;color:#61dcff;line-height:1.5}
+@media(max-width:1150px){.register-page{grid-template-columns:1fr}.register-aside{display:none}}@media(max-width:650px){.register-section{padding:15px}.register-section .grid-2{grid-template-columns:1fr}.triple{grid-template-columns:1fr 1fr}.register-heading .page-subtitle br{display:none}.register-actions .btn{min-width:0;flex:1}}
+</style>
