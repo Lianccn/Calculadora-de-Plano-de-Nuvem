@@ -30,7 +30,10 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
                 throw new Exception(string.Join("; ", erros.Select(e => e.ErrorMessage)));
             }
 
-            if(_context.Usuarios.Any(c => c.Email == cliente.Email) || _context.Clientes.Any(c => c.Cnpj == cliente.Cnpj))
+            var email = cliente.Email.Trim().ToLowerInvariant();
+            var cnpj = cliente.Cnpj.Trim();
+
+            if(_context.Usuarios.Any(c => c.Email == email) || _context.Clientes.Any(c => c.Cnpj == cnpj))
             {
                 throw new Exception("Usuário ou empresa já cadastrados");
             }

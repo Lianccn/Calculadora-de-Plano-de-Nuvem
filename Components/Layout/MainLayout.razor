@@ -12,6 +12,11 @@
             <NavLink href="/calculadora-nuvem"><span class="nav-icon">☁</span>Calculadora Nuvem</NavLink>
             <NavLink href="/calculadora-fisico"><span class="nav-icon">▣</span>Calculadora Físico</NavLink>
             <NavLink href="/sobre"><span class="nav-icon">ⓘ</span>Sobre</NavLink>
+            <form method="post" action="/auth/logout">
+                <AntiforgeryToken />
+                <button type="submit">Sair</button>
+            </form>
+
         </nav>
 
         <div class="sidebar-promo">

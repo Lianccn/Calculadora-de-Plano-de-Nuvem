@@ -1,0 +1,13 @@
+﻿@inject NavigationManager Navigation
+
+<p>Redirecionando para o login...</p>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Navigation.NavigateTo(
+            "/login",
+            forceLoad: true
+        );
+    }
+}

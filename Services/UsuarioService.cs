@@ -1,5 +1,7 @@
 ﻿using Calculadora_de_Plano_de_Nuvem.Data;
 using Calculadora_de_Plano_de_Nuvem.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Calculadora_de_Plano_de_Nuvem.Services
 {
@@ -11,6 +13,8 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
         {
             _context = context;
         }
+
+        private readonly PasswordHasher<Usuario> _passwordHasher = new();
 
         public Usuario? BuscarPorEmail(string email)
         {
@@ -27,6 +31,25 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
             }
 
             return resultado;
+        }
+
+        public bool ValidarLogin(string email, string senha)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha))
+            {
+                return false;
+            }
+
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Email.ToLower() == email.Trim().ToLower());
+
+            if (usuario == null)
+            {
+                return false;
+            }
+
+            var resultado = _passwordHasher.VerifyHashedPassword(usuario, usuario.SenhaHash, senha);
+
+            return resultado != PasswordVerificationResult.Failed;
         }
     }
 }
