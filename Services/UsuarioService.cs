@@ -16,7 +16,7 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
 
         private readonly PasswordHasher<Usuario> _passwordHasher = new();
 
-        public Usuario? BuscarPorEmail(string email)
+        public Usuario BuscarPorEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {

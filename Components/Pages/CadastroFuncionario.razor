@@ -1,0 +1,90 @@
+﻿@page "/cadastro-funcionario"
+@attribute [Authorize(Roles = "Administrador")]
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Calculadora_de_Plano_de_Nuvem.Dtos
+@using Calculadora_de_Plano_de_Nuvem.Services
+
+@rendermode InteractiveServer
+
+@inject FuncionarioService FuncionarioService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1>Cadastro de Funcionários</h1>
+
+<EditForm Model="@funcionario" OnValidSubmit="Cadastrar" FormName="CadastroFuncionario">
+    <DataAnnotationsValidator />
+
+    <div>
+        <label>Nome completo</label>
+        <InputText @bind-Value="funcionario.Nome" />
+        <ValidationMessage For="@(() => funcionario.Nome)" />
+    </div>
+
+    <div>
+        <label>E-mail</label>
+        <InputText @bind-Value="funcionario.Email" />
+        <ValidationMessage For="@(() => funcionario.Email)" />
+    </div>
+
+    <div>
+        <label>Telefone</label>
+        <InputText @bind-Value="funcionario.Telefone" />
+        <ValidationMessage For="@(() => funcionario.Telefone)" />
+    </div>
+
+    <div>
+        <label>Cargo</label>
+        <InputText @bind-Value="funcionario.Cargo" />
+        <ValidationMessage For="@(() => funcionario.Cargo)" />
+    </div>
+
+    <div>
+        <label>Senha</label>
+        <InputText type="password" @bind-Value="funcionario.Senha" />
+        <ValidationMessage For="@(() => funcionario.Senha)" />
+    </div>
+
+    <div>
+        <label>Confirmar senha</label>
+        <InputText type="password" @bind-Value="funcionario.ConfirmarSenha" />
+        <ValidationMessage For="@(() => funcionario.ConfirmarSenha)" />
+    </div>
+
+    <button type="submit">Cadastrar funcionário</button>
+</EditForm>
+
+@if (!string.IsNullOrWhiteSpace(mensagem))
+{
+    <p>@mensagem</p>
+}
+
+@code {
+    private FuncionarioDto funcionario = new();
+    private string mensagem = string.Empty;
+
+    private async Task Cadastrar()
+    {
+        try
+        {
+            var estado = await AuthenticationStateProvider
+                .GetAuthenticationStateAsync();
+
+            var usuario = estado.User;
+
+            FuncionarioService.CadastrarFuncionario(
+                funcionario,
+                usuario
+            );
+
+            mensagem = "Funcionário cadastrado com sucesso!";
+            funcionario = new FuncionarioDto();
+        }
+        catch (Exception ex)
+        {
+            mensagem = ex.Message;
+        }
+    }
+}

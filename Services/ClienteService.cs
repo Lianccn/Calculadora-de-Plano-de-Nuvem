@@ -3,6 +3,7 @@ using Calculadora_de_Plano_de_Nuvem.Dtos;
 using Calculadora_de_Plano_de_Nuvem.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Calculadora_de_Plano_de_Nuvem.Services
 {
@@ -27,13 +28,13 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
         {
             if(!Validar(cliente, out var erros))
             {
-                throw new Exception(string.Join("; ", erros.Select(e => e.ErrorMessage)));
+                throw new Exception(string.Join("; ", erros.Select(erro => erro.ErrorMessage)));
             }
 
             var email = cliente.Email.Trim().ToLowerInvariant();
             var cnpj = cliente.Cnpj.Trim();
 
-            if(_context.Usuarios.Any(c => c.Email == email) || _context.Clientes.Any(c => c.Cnpj == cnpj))
+            if(_context.Usuarios.Any(cliente => cliente.Email == email) || _context.Clientes.Any(cliente => cliente.Cnpj == cnpj))
             {
                 throw new Exception("Usuário ou empresa já cadastrados");
             }
@@ -41,8 +42,9 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
             var novoUsuario = new Usuario
             {
                 Nome = cliente.Nome,
-                Email = cliente.Email,
+                Email = email,
                 Telefone = cliente.Telefone,
+                TipoUsuario = TipoUsuario.Cliente
             };
 
             novoUsuario.SenhaHash = _passwordHasher.HashPassword(novoUsuario, cliente.Senha);
@@ -50,14 +52,37 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
             var novoCliente = new Cliente
             {
                 NomeEmpresa = cliente.NomeEmpresa,
-                Cnpj = cliente.Cnpj,
-                Usuario = novoUsuario
+                Cnpj = cnpj
             };
+
+            novoUsuario.Cliente = novoCliente;
 
             _context.Clientes.Add(novoCliente);
             _context.SaveChanges();
             return novoCliente;
 
+        }
+
+        public List<Cliente> ListarClientes()
+        {
+            return _context.Clientes.Include(cliente => cliente.Usuarios).ToList();            
+        }
+
+        public Cliente BuscarPorId(int id)
+        {
+            if(id <= 0)
+            {
+                throw new InvalidOperationException("Id inválido.");
+            }
+
+            Cliente? cliente = _context.Clientes.Include(cliente => cliente.Usuarios).FirstOrDefault(cliente => cliente.Id == id);
+
+            if(cliente == null)
+            {
+                throw new Exception("Cliente não encontrado");
+            }
+
+            return cliente;
         }
     }
 }

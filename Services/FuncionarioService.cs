@@ -3,6 +3,7 @@ using Calculadora_de_Plano_de_Nuvem.Dtos;
 using Calculadora_de_Plano_de_Nuvem.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace Calculadora_de_Plano_de_Nuvem.Services
 {
@@ -26,9 +27,13 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
 
         }
 
-        public Funcionario CadastrarFuncionario(FuncionarioDto funcionario)
+        public Funcionario CadastrarFuncionario(FuncionarioDto funcionario, ClaimsPrincipal solicitante)
         {
-            if(!Validar(funcionario, out var erros))
+            if (!solicitante.IsInRole("Administrador"))
+            {
+                throw new UnauthorizedAccessException("Somente administradores podem cadastrar funcionários.");
+            }
+            if (!Validar(funcionario, out var erros))
             {
                 throw new Exception(string.Join("; ", erros.Select(e => e.ErrorMessage)));                
             }
@@ -37,14 +42,15 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
             
             if(_context.Usuarios.Any(f => f.Email == email))
             {
-                throw new Exception("Usuário ja está cadastrado");
+                throw new InvalidOperationException("Usuário ja está cadastrado");
             }
 
             var novoUsuario = new Usuario
             {
                 Nome = funcionario.Nome,
-                Email = funcionario.Email,
-                Telefone = funcionario.Telefone
+                Email = email,
+                Telefone = funcionario.Telefone,
+                TipoUsuario = TipoUsuario.Funcionario
             };
 
             novoUsuario.SenhaHash = _passwordHasher.HashPassword(novoUsuario, funcionario.Senha);

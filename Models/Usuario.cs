@@ -1,5 +1,11 @@
 ﻿namespace Calculadora_de_Plano_de_Nuvem.Models
 {
+    public enum TipoUsuario
+    {
+        Cliente,
+        Funcionario,
+        Administrador
+    }
     public class Usuario
     {
         public int Id { get; set; }
@@ -7,8 +13,10 @@
         public string Email { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
         public string SenhaHash { get; set; } = string.Empty;
+        public int? ClienteId { get; set; }
         public Funcionario? Funcionario { get; set; }
         public Cliente? Cliente { get; set; }
+        public TipoUsuario TipoUsuario { get; set; }
 
     }
 }

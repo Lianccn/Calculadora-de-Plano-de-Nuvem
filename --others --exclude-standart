@@ -1,0 +1,11 @@
+ Components/Layout/MainLayout.razor |  9 [32m+++[m[31m-[m
+ Components/Routes.razor            | 22 [32m++++[m[31m-----[m
+ Data/CalculadoraContext.cs         | 17 [32m+++++[m[31m--[m
+ Dtos/FuncionatioDto.cs             | 29 [31m------------[m
+ Models/Cliente.cs                  |  3 [32m+[m[31m-[m
+ Models/Usuario.cs                  |  8 [32m++++[m
+ Program.cs                         | 93 [32m+++++++++++++++++++++++++++++++[m[31m-------[m
+ Services/ClienteService.cs         | 35 [32m++++++++++++[m[31m--[m
+ Services/FuncionarioService.cs     | 16 [32m+++++[m[31m--[m
+ Services/UsuarioService.cs         |  2 [32m+[m[31m-[m
+ 10 files changed, 159 insertions(+), 75 deletions(-)

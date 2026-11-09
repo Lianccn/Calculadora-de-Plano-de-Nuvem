@@ -21,6 +21,7 @@ builder.Services.AddDbContext<CalculadoraContext>(options => options.UseMySQL(co
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<FuncionarioService>();
+builder.Services.AddScoped<AdministradorService>();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -38,6 +39,7 @@ builder.Services
 
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
+
 
 var app = builder.Build();
 
@@ -65,7 +67,8 @@ app.MapPost("/auth/login", async (
     {
         new(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
         new(ClaimTypes.Name, usuario.Nome),
-        new(ClaimTypes.Email, usuario.Email)
+        new(ClaimTypes.Email, usuario.Email),
+        new Claim(ClaimTypes.Role, usuario.TipoUsuario.ToString())
     };
 
     var identidade = new ClaimsIdentity(
@@ -86,7 +89,33 @@ app.MapPost("/auth/login", async (
     return Results.Redirect("/");
 });
 
-// CÓDIGO USADO PARA TESTE COM BANCO
+// CODIGO PARA CADASTRAR O ADMINISTRADOR DO SISTEMA
+//using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+//{
+//    var adminService = scope.ServiceProvider
+//        .GetRequiredService<AdministradorService>();
+
+//    var admin = new AdministradorDto
+//    {
+//        Nome = "Administrador",
+//        Email = "admin@teste.com",
+//        Telefone = "14999999999",
+//        Senha = "Admin@123"
+//    };
+
+//    try
+//    {
+//        var resultado = adminService.CadastrarAdmin(admin);
+
+//        Console.WriteLine($"Administrador criado: {resultado.Email}");
+//    }
+//    catch (Exception ex)
+//    {
+//        Console.WriteLine($"Erro: {ex.Message}");
+//    }
+//}
+
+// CÓDIGO USADO PARA CADASTRAR CLIENTE TESTE
 //using (var scope = app.Services.CreateScope())
 //{
 //    var clienteService = scope.ServiceProvider
@@ -118,26 +147,57 @@ app.MapPost("/auth/login", async (
 //    }
 //}
 
+
 // CÓDIGO PARA TESTAR A VALIDADE DO LOGIN
-//using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
+{
+    var usuarioService = scope.ServiceProvider
+        .GetRequiredService<UsuarioService>();
+
+    var loginValido = usuarioService.ValidarLogin(
+        "teste.cadastro@example.com",
+        "SenhaTeste123"
+    );
+
+    Console.WriteLine($"Login válido: {loginValido}");
+
+    var senhaIncorreta = usuarioService.ValidarLogin(
+        "teste.cadastro@example.com",
+        "SenhaErrada"
+    );
+
+    Console.WriteLine($"Senha incorreta aceita: {senhaIncorreta}");
+}
+//
+
+// CODIGO PARA TESTAR CADASTRO DE FUNCIONARIO
+//using (var scope = builder.Services.BuildServiceProvider().CreateScope())
 //{
-//    var usuarioService = scope.ServiceProvider
-//        .GetRequiredService<UsuarioService>();
+//    var funcionarioService = scope.ServiceProvider
+//        .GetRequiredService<FuncionarioService>();
 
-//    var loginValido = usuarioService.ValidarLogin(
-//        "teste.cadastro@example.com",
-//        "SenhaTeste123"
-//    );
+//    var funcionario = new FuncionarioDto
+//    {
+//        Nome = "Funcionario Teste",
+//        Email = "funcionario@teste.com",
+//        Telefone = "14999999999",
+//        Senha = "Teste@123",
+//        ConfirmarSenha = "Teste@123",
+//        Cargo = "Gerente"
+//    };
 
-//    Console.WriteLine($"Login válido: {loginValido}");
+//    try
+//    {
+//        var resultado = funcionarioService.CadastrarFuncionario(funcionario);
 
-//    var senhaIncorreta = usuarioService.ValidarLogin(
-//        "teste.cadastro@example.com",
-//        "SenhaErrada"
-//    );
-
-//    Console.WriteLine($"Senha incorreta aceita: {senhaIncorreta}");
+//        Console.WriteLine($"Funcionário cadastrado: {resultado.Id}");
+//    }
+//    catch (Exception ex)
+//    {
+//        Console.WriteLine($"Erro no cadastro: {ex.Message}");
+//    }
 //}
+//
 
 if (!app.Environment.IsDevelopment())
 {
@@ -167,3 +227,4 @@ app.MapPost("/auth/logout", async (HttpContext context) =>
 
 
 app.Run();
+    

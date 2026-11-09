@@ -76,14 +76,15 @@ namespace Calculadora_de_Plano_de_Nuvem.Data
                 .HasForeignKey<Solucao>(s => s.InfraFisicoId);
 
             // Relacionamento Usuario - Cliente
-            modelBuilder.Entity<Cliente>()
-                .Property(c => c.UsuarioId)
-                .HasColumnName("id_usuario");
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.ClienteId)
+                .HasColumnName("id_cliente");
 
             modelBuilder.Entity<Cliente>()
-                .HasOne(c => c.Usuario)
+                .HasMany<Usuario>(u => u.Usuarios)
                 .WithOne(u => u.Cliente)
-                .HasForeignKey<Cliente>(c => c.UsuarioId);
+                .HasForeignKey(u => u.ClienteId)
+                .IsRequired(false);
 
             // Relacionamento Usuario - Funcionario 
             modelBuilder.Entity<Funcionario>()
@@ -174,6 +175,12 @@ namespace Calculadora_de_Plano_de_Nuvem.Data
                 .HasOne(c => c.InfraFisico)
                 .WithOne(i => i.CustoFisico)
                 .HasForeignKey<CustoFisico>(c => c.InfraFisicoId);
+
+            // Identifica a coluna de tipo de usuario na tabela usuarios
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.TipoUsuario)
+                .HasColumnName("tipo_usuario")
+                .HasConversion<string>();
         }
     }
 }

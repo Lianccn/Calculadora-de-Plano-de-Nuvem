@@ -3,10 +3,9 @@
     public class Cliente
     {
         public int Id { get; set; }
-        public int UsuarioId { get; set; }
         public string NomeEmpresa { get; set; } = string.Empty;
         public string Cnpj { get; set; } = string.Empty;
-        public Usuario Usuario { get; set; } = null!;
+        public List<Usuario> Usuarios { get; set; } = new();
         public List<Simulacao> Simulacoes { get; set; } = new();
     }
 }
