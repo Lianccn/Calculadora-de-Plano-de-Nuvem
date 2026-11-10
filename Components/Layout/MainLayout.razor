@@ -19,6 +19,14 @@
                     </NavLink>
                 </Authorized>
             </AuthorizeView>
+            <AuthorizeView Roles="Cliente, Administrador">
+                <Authorized>
+                    <NavLink class="nav-link" href="cadastro-usuario">
+                        <span class="bi bi-person-plus-fill" aria-hidden="true"></span>
+                        Adicionar usuário
+                    </NavLink>
+                </Authorized>
+            </AuthorizeView>
             <form method="post" action="/auth/logout">
                 <AntiforgeryToken />
                 <button type="submit">Sair</button>

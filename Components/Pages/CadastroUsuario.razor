@@ -1,0 +1,117 @@
+﻿@page "/cadastro-usuario"
+@attribute [Authorize(Roles = "Cliente, Administrador")]
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Calculadora_de_Plano_de_Nuvem.Dtos
+@using Calculadora_de_Plano_de_Nuvem.Services
+
+@inject UsuarioService UsuarioService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>Adicionar usuário</PageTitle>
+
+<h3>Adicionar usuário à empresa</h3>
+
+@if (idCliente > 0)
+{
+    <p>Empresa identificada! ID: @idCliente</p>
+
+    <EditForm Model="usuarioDto" OnValidSubmit="CadastrarUsuario">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label>Nome</label>
+            <InputText class="form-control"
+                       @bind-Value="usuarioDto.Nome" />
+            <ValidationMessage For="@(() => usuarioDto.Nome)" />
+        </div>
+
+        <div class="mb-3">
+            <label>E-mail</label>
+            <InputText class="form-control"
+                       @bind-Value="usuarioDto.Email" />
+            <ValidationMessage For="@(() => usuarioDto.Email)" />
+        </div>
+
+        <div class="mb-3">
+            <label>Telefone</label>
+            <InputText class="form-control"
+                       @bind-Value="usuarioDto.Telefone" />
+            <ValidationMessage For="@(() => usuarioDto.Telefone)" />
+        </div>
+
+        <div class="mb-3">
+            <label>Senha</label>
+            <InputText type="password"
+                       class="form-control"
+                       @bind-Value="usuarioDto.Senha" />
+            <ValidationMessage For="@(() => usuarioDto.Senha)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Cadastrar usuário
+        </button>
+    </EditForm>
+}
+else
+{
+    <p>Não foi possível identificar a empresa associada ao usuário.</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(mensagem))
+{
+    <p>@mensagem</p>
+}
+
+@code {
+    private int idCliente;
+    private string mensagem = "";
+
+    private UsuarioEmpresaDto usuarioDto = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var estado = await AuthenticationStateProvider
+            .GetAuthenticationStateAsync();
+
+        var idUsuario = estado.User
+            .FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!int.TryParse(idUsuario, out var usuarioId))
+        {
+            mensagem = "Não foi possível identificar o usuário.";
+            return;
+        }
+
+        var usuario = UsuarioService.BuscarPorId(usuarioId);
+
+        if (usuario.ClienteId == null)
+        {
+            mensagem = "Usuário não está associado a uma empresa.";
+            return;
+        }
+
+        idCliente = usuario.ClienteId.Value;
+    }
+
+    private void CadastrarUsuario()
+    {
+        try
+        {
+            UsuarioService.AdicionarUsuario(usuarioDto, idCliente);
+
+            mensagem = "Usuário cadastrado com sucesso!";
+
+            usuarioDto = new UsuarioEmpresaDto();
+        }
+        catch (Exception ex)
+        {
+            mensagem = ex.Message;
+        }
+    }
+}

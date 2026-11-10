@@ -4,7 +4,8 @@
     {
         Cliente,
         Funcionario,
-        Administrador
+        Administrador,
+        UsuarioEmpresa
     }
     public class Usuario
     {

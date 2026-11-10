@@ -1,3 +1,13 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using Calculadora_de_Plano_de_Nuvem.Dtos
+@using Calculadora_de_Plano_de_Nuvem.Services
+
+@rendermode InteractiveServer
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UsuarioService UsuarioService
+@inject ClienteService ClienteService
 @page "/cadastro"
 <PageTitle>Criar conta - Cloud Cost Calculator</PageTitle>
 <div class="register-page">
@@ -43,6 +53,15 @@
     <aside class="register-aside"><div class="hero-server"><div class="server-art"><i></i><i></i><i></i><b></b></div><div class="cloud-art">☁</div></div><h2>Transforme sua infraestrutura em oportunidades.</h2><p>Com base nas informações do seu servidor atual, vamos recomendar o melhor plano em nuvem e mostrar o comparativo completo de custos.</p><div class="benefit"><span>ϟ</span><div><b>Rápido e simples</b><p>Leva apenas alguns minutos para se cadastrar.</p></div></div><div class="benefit"><span>♢</span><div><b>Seus dados seguros</b><p>Proteja suas informações com boas práticas de segurança.</p></div></div><div class="benefit"><span>▥</span><div><b>Decisões mais inteligentes</b><p>Compare custos e planeje o futuro da sua empresa.</p></div></div></aside>
 </div>
 @code {
+    private bool carregando = true;
+    private bool usuarioAutenticado;
+    private bool ehCliente;
+    private bool acessoNegado;
+
+    private int idCliente;
+    private string mensagem = "";
+
+    private UsuarioEmpresaDto usuarioDto = new();
     private RegistrationForm form = new();
     private string confirmPassword = "";
     private string message = "";
@@ -52,6 +71,36 @@
     private sealed class RegistrationForm {
         public string Empresa { get; set; } = ""; public string Cnpj { get; set; } = ""; public string Responsavel { get; set; } = ""; public string Email { get; set; } = ""; public string Telefone { get; set; } = ""; public string Cargo { get; set; } = ""; public string Senha { get; set; } = "";
         public string Fabricante { get; set; } = "Dell"; public string Modelo { get; set; } = ""; public string Processador { get; set; } = ""; public string Nucleos { get; set; } = "6"; public string Threads { get; set; } = "12"; public string Ram { get; set; } = "32 GB"; public string TipoArmazenamento { get; set; } = "SSD"; public string Capacidade { get; set; } = "1 TB"; public string Discos { get; set; } = "2"; public string Raid { get; set; } = "RAID 1"; public string Sistema { get; set; } = "Windows Server"; public string Banda { get; set; } = "500 Mbps"; public string Backup { get; set; } = "Sim"; public string FrequenciaBackup { get; set; } = "Diário"; public string TempoUso { get; set; } = "1 a 3 anos";
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var estado = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var usuario = estado.User;
+
+        usuarioAutenticado = usuario.Identity?.IsAuthenticated == true;
+
+        if (usuarioAutenticado)
+        {
+            if (usuario.IsInRole("Cliente"))
+            {
+                var email = usuario.FindFirst(ClaimTypes.Email)?.Value;
+
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    var usuarioBanco = UsuarioService.BuscarPorEmail(email);
+                    if (usuarioBanco.ClienteId.HasValue)
+                    {
+                        idCliente = usuarioBanco.ClienteId.Value;
+                        ehCliente = true;
+                    }
+                }
+            }
+            else
+            {
+                acessoNegado = true;
+            }
+        }
+        carregando = false;
     }
 }
 <style>
