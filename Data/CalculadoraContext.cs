@@ -20,6 +20,8 @@ namespace Calculadora_de_Plano_de_Nuvem.Data
         public DbSet<ArmazenamentoFisico> ArmazenamentosFisicos => Set<ArmazenamentoFisico>();
         public DbSet<CustoFisico> CustosFisicos => Set<CustoFisico>();
         public DbSet<Solucao> Solucoes => Set<Solucao>();
+        public DbSet<MemoriaRam> MemoriasRam => Set<MemoriaRam>();
+        public DbSet<Disco> Discos => Set<Disco>();
 
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
@@ -44,6 +46,8 @@ namespace Calculadora_de_Plano_de_Nuvem.Data
             modelBuilder.Entity<ArmazenamentoFisico>().ToTable("armazenamento_fisico");
             modelBuilder.Entity<CustoFisico>().ToTable("custo_fisico");
             modelBuilder.Entity<Solucao>().ToTable("solucoes");
+            modelBuilder.Entity<MemoriaRam>().ToTable("memoria_ram");
+            modelBuilder.Entity<Disco>().ToTable("discos");
 
             // Relacionamento Simulacao - Solucao
             modelBuilder.Entity<Solucao>()
@@ -144,7 +148,8 @@ namespace Calculadora_de_Plano_de_Nuvem.Data
             modelBuilder.Entity<Armazenamento>()
                 .HasOne(a => a.InfraAtual)
                 .WithMany(i => i.Armazenamentos)
-                .HasForeignKey(a => a.InfraAtualId);
+                .HasForeignKey(a => a.InfraAtualId)
+                .HasConstraintName("armazenamento_ibfk_1");
 
             // Relacionaamento InfraFisico - ArmazenamentoFisico
             modelBuilder.Entity<ArmazenamentoFisico>()
@@ -181,6 +186,30 @@ namespace Calculadora_de_Plano_de_Nuvem.Data
                 .Property(u => u.TipoUsuario)
                 .HasColumnName("tipo_usuario")
                 .HasConversion<string>();
+
+            // Relacionamento MemoriaRam - InfraFisico
+            modelBuilder.Entity<InfraFisico>()
+                .Property(i => i.MemoriaRamId)
+                .HasColumnName("id_memoria_ram");
+
+            modelBuilder.Entity<InfraFisico>()
+                .HasOne(i => i.MemoriaRam)
+                .WithMany()
+                .HasForeignKey(i => i.MemoriaRamId);
+
+            modelBuilder.Entity<InfraFisico>()
+                .Property(i => i.QuantidadeModulos)
+                .HasColumnName("quantidade_modulos");
+
+            // Relacionamento Disco - ArmazenamentoFisico
+            modelBuilder.Entity<ArmazenamentoFisico>()
+                .Property(a => a.DiscoId)
+                .HasColumnName("id_disco");
+
+            modelBuilder.Entity<ArmazenamentoFisico>()
+                .HasOne(a => a.Disco)
+                .WithMany()
+                .HasForeignKey(a => a.DiscoId);
         }
     }
 }

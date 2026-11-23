@@ -76,7 +76,12 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
 
         public Usuario AdicionarUsuario(UsuarioEmpresaDto usuarioDto, int id)
         {
-            var empresa = BuscarPorId(id);
+            var empresa = _context.Clientes.FirstOrDefault(c => c.Id == id);
+
+            if (empresa == null)
+            {
+                throw new Exception("Empresa não localizada.");
+            }
 
             if (!ValidarUsuario(usuarioDto, out var erros))
             {

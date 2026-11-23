@@ -2,31 +2,40 @@
 @using System.Security.Claims
 @using Calculadora_de_Plano_de_Nuvem.Dtos
 @using Calculadora_de_Plano_de_Nuvem.Services
+@using Calculadora_de_Plano_de_Nuvem.Models
 
 @rendermode InteractiveServer
 
+
+@inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UsuarioService UsuarioService
 @inject ClienteService ClienteService
+@inject SimulacaoService SimulacaoService
+@inject InfraAtualService InfraAtualService
 @page "/cadastro"
 <PageTitle>Criar conta - Cloud Cost Calculator</PageTitle>
 <div class="register-page">
     <div class="register-main">
         <header class="register-heading"><h1 class="page-heading">Criar conta</h1><p class="page-subtitle">Cadastre sua empresa e informe a configuração do seu servidor atual<br class="desktop-break" /> para começarmos a simulação.</p></header>
         <EditForm Model="form" OnValidSubmit="Continue">
-            <section class="panel register-section">
-                <div class="section-head"><span class="step-number">1</span><div><h2>Dados da empresa e responsável</h2><p>Informe os dados básicos para criar sua conta.</p></div></div>
-                <div class="grid-2">
-                    <div class="field"><label>Nome da empresa <span class="required">*</span></label><input class="control" @bind="form.Empresa" placeholder="Ex.: Minha Empresa Ltda." required /></div>
-                    <div class="field"><label>CNPJ <span class="required">*</span></label><input class="control" @bind="form.Cnpj" placeholder="00.000.000/0000-00" required /></div>
-                    <div class="field"><label>Nome do responsável <span class="required">*</span></label><input class="control" @bind="form.Responsavel" placeholder="Ex.: João Silva" required /></div>
-                    <div class="field"><label>E-mail <span class="required">*</span></label><input class="control" type="email" @bind="form.Email" placeholder="exemplo@empresa.com" required /></div>
-                    <div class="field"><label>Telefone <span class="required">*</span></label><input class="control" type="tel" @bind="form.Telefone" placeholder="(11) 90000-0000" required /></div>
-                    <div class="field"><label>Cargo</label><input class="control" @bind="form.Cargo" placeholder="Ex.: Gerente de TI" /></div>
-                    <div class="field"><label>Senha <span class="required">*</span></label><input class="control" type="password" @bind="form.Senha" placeholder="Crie uma senha" required minlength="8" /></div>
-                    <div class="field"><label>Confirmar senha <span class="required">*</span></label><input class="control" type="password" @bind="confirmPassword" placeholder="Repita a senha" required minlength="8" /></div>
-                </div>
-            </section>
+            @if (!ehCliente)
+            {
+                <section class="panel register-section">
+                    <div class="section-head"><span class="step-number">1</span><div><h2>Dados da empresa e responsável</h2><p>Informe os dados básicos para criar sua conta.</p></div></div>
+                    <div class="grid-2">
+                        <div class="field"><label>Nome da empresa <span class="required">*</span></label><input class="control" @bind="form.Empresa" placeholder="Ex.: Minha Empresa Ltda." required /></div>
+                        <div class="field"><label>CNPJ <span class="required">*</span></label><input class="control" @bind="form.Cnpj" placeholder="00.000.000/0000-00" required /></div>
+                        <div class="field"><label>Nome do responsável <span class="required">*</span></label><input class="control" @bind="form.Responsavel" placeholder="Ex.: João Silva" required /></div>
+                        <div class="field"><label>E-mail <span class="required">*</span></label><input class="control" type="email" @bind="form.Email" placeholder="exemplo@empresa.com" required /></div>
+                        <div class="field"><label>Telefone <span class="required">*</span></label><input class="control" type="tel" @bind="form.Telefone" placeholder="(11) 90000-0000" required /></div>
+                        <div class="field"><label>Cargo</label><input class="control" @bind="form.Cargo" placeholder="Ex.: Gerente de TI" /></div>
+                        <div class="field"><label>Senha <span class="required">*</span></label><input class="control" type="password" @bind="form.Senha" placeholder="Crie uma senha" required minlength="8" /></div>
+                        <div class="field"><label>Confirmar senha <span class="required">*</span></label><input class="control" type="password" @bind="confirmPassword" placeholder="Repita a senha" required minlength="8" /></div>
+                    </div>
+                </section>
+            }
+            
             <section class="panel register-section">
                 <div class="section-head"><span class="step-number">2</span><div><h2>Configuração do servidor atual</h2><p>Informe as principais características do servidor que sua empresa utiliza hoje.</p></div></div>
                 <div class="grid-2">
@@ -35,7 +44,7 @@
                     <div class="field"><label>Processador (CPU)</label><input class="control" @bind="form.Processador" placeholder="Ex.: Intel Xeon E-2236" /></div>
                     <div class="field triple"><label>Núcleos</label><select class="control" @bind="form.Nucleos"><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option><option>32</option></select><label>Threads</label><select class="control" @bind="form.Threads"><option>4</option><option>8</option><option>12</option><option>16</option><option>24</option><option>32</option><option>64</option></select></div>
                     <div class="field"><label>Memória RAM</label><select class="control" @bind="form.Ram"><option>8 GB</option><option>16 GB</option><option>32 GB</option><option>64 GB</option><option>128 GB</option><option>256 GB</option></select></div>
-                    <div class="field"><label>Tipo de armazenamento</label><select class="control" @bind="form.TipoArmazenamento"><option>SSD</option><option>HDD</option><option>NVMe</option></select></div>
+                    <div class="field"><label>Tipo de armazenamento</label><select class="control" @bind="form.TipoArmazenamento"><option>SSD</option><option>HD</option><option>HD e SSD</option></select></div>
                     <div class="field"><label>Capacidade total</label><select class="control" @bind="form.Capacidade"><option>500 GB</option><option>1 TB</option><option>2 TB</option><option>4 TB</option><option>8 TB</option></select></div>
                     <div class="field"><label>Quantidade de discos</label><select class="control" @bind="form.Discos"><option>1</option><option>2</option><option>4</option><option>8</option></select></div>
                     <div class="field"><label>RAID (se houver)</label><select class="control" @bind="form.Raid"><option>Não possui</option><option>RAID 0</option><option>RAID 1</option><option>RAID 5</option><option>RAID 10</option></select></div>
@@ -65,8 +74,38 @@
     private RegistrationForm form = new();
     private string confirmPassword = "";
     private string message = "";
-    private void Continue() {
-        message = form.Senha != confirmPassword ? "As senhas não conferem." : "Dados validados visualmente. A integração com cadastro e banco de dados ainda precisa ser implementada.";
+    private async Task Continue()
+    {
+        try
+        {
+            if (!ehCliente)
+            {
+                message = "Vamos implementar o cadastro de novas empresas na próxima etapa.";
+                return;
+            }
+
+            var infraAtualDto = CriarInfraAtualDto();
+
+            var simulacao = await SimulacaoService.CadastrarSimulacaoAsync(
+                idCliente,
+                ConverterPeriodoUso()
+            );
+
+            await InfraAtualService.CadastrarInfraAtualAsync(
+                infraAtualDto,
+                simulacao.Id
+            );
+
+            message = "Registro realizado com sucesso!";
+
+            await Task.Delay(1000);
+
+            Navigation.NavigateTo($"/calculadora-fisico?simulacaoId={simulacao.Id}");
+        }
+        catch (Exception ex)
+        {
+            message = ex.ToString();
+        }
     }
     private sealed class RegistrationForm {
         public string Empresa { get; set; } = ""; public string Cnpj { get; set; } = ""; public string Responsavel { get; set; } = ""; public string Email { get; set; } = ""; public string Telefone { get; set; } = ""; public string Cargo { get; set; } = ""; public string Senha { get; set; } = "";
@@ -101,6 +140,67 @@
             }
         }
         carregando = false;
+    }
+
+    private InfraAtualDto CriarInfraAtualDto()
+    {
+        return new InfraAtualDto
+        {
+            TipoEquipamento = TipoEquipamento.Servidor,
+            Fabricante = form.Fabricante,
+            Modelo = form.Modelo,
+            NomeProcessador = form.Processador,
+            Nucleos = int.Parse(form.Nucleos),
+            Threads = int.Parse(form.Threads),
+            Memoria = int.Parse(form.Ram.Replace(" GB", "")),
+            SistemaOperacional = form.Sistema,
+            LarguraBanda = form.Banda == "1 Gbps" ? 1000 :
+                           form.Banda == "2 Gbps" ? 2000 :
+                           int.Parse(form.Banda.Replace(" Mbps", "")),
+            ExisteBackup = form.Backup == "Sim",
+            FrequenciaBackup = ConverterFrequenciaBackup(),
+            TempoUso = ConverterPeriodoUso(),
+            TipoArmazenamento = form.TipoArmazenamento,
+            Capacidade = ConverterCapacidade(),
+            QuantidadeDiscos = int.Parse(form.Discos)
+        };
+    }
+
+    private FrequenciaBackup? ConverterFrequenciaBackup()
+    {
+        return form.FrequenciaBackup switch
+        {
+            "Diário" => FrequenciaBackup.Diario,
+            "Semanal" => FrequenciaBackup.Semanal,
+            "Mensal" => FrequenciaBackup.Mensal,
+            "Não possui" => null,
+            _ => throw new ArgumentException("Frequência de backup inválida.")
+        };
+    }
+
+    private PeriodoUso ConverterPeriodoUso()
+    {
+        return form.TempoUso switch
+        {
+            "Menos de 1 ano" => PeriodoUso.MenosDe1Ano,
+            "1 a 3 anos" => PeriodoUso.De1a3Anos,
+            "3 a 5 anos" => PeriodoUso.De3a5Anos,
+            "Mais de 5 anos" => PeriodoUso.MaisDe5Anos,
+            _ => throw new ArgumentException("Período de uso inválido.")
+        };
+    }
+
+    private int ConverterCapacidade()
+    {
+        return form.Capacidade switch
+        {
+            "500 GB" => 500,
+            "1 TB" => 1000,
+            "2 TB" => 2000,
+            "4 TB" => 4000,
+            "8 TB" => 8000,
+            _ => throw new ArgumentException("Capacidade inválida.")
+        };
     }
 }
 <style>

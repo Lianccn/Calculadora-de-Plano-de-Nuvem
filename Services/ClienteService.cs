@@ -58,6 +58,7 @@ namespace Calculadora_de_Plano_de_Nuvem.Services
             novoUsuario.Cliente = novoCliente;
 
             _context.Clientes.Add(novoCliente);
+            _context.Usuarios.Add(novoUsuario);
             _context.SaveChanges();
             return novoCliente;
 

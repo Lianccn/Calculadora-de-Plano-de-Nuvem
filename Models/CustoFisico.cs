@@ -7,6 +7,10 @@
         public decimal CustoMemoria { get; set; }
         public decimal CustoArmazenamento { get; set; }
         public decimal CustoInternet { get; set; }
+        public decimal CustoEnergia { get; set; }
+        public decimal CustoManutencao { get; set; }
+        public decimal CustoDepreciacao { get; set; }
+        public decimal CustoAluguel { get; set; }
         public decimal CustoTotal { get; set; }
         public int InfraFisicoId { get; set; }
         public InfraFisico InfraFisico { get; set; } = null!;

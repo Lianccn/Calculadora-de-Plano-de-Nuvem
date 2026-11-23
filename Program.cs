@@ -1,14 +1,15 @@
 using Calculadora_de_Plano_de_Nuvem.Components;
 using Calculadora_de_Plano_de_Nuvem.Data;
 using Calculadora_de_Plano_de_Nuvem.Dtos;
+using Calculadora_de_Plano_de_Nuvem.Models;
 using Calculadora_de_Plano_de_Nuvem.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Security.Claims;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
@@ -22,6 +23,9 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<FuncionarioService>();
 builder.Services.AddScoped<AdministradorService>();
+builder.Services.AddScoped<RecomendacaoInfraFisicaService>();
+builder.Services.AddScoped<InfraAtualService>();
+builder.Services.AddScoped<SimulacaoService>();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -42,6 +46,26 @@ builder.Services.AddCascadingAuthenticationState();
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider
+        .GetRequiredService<CalculadoraContext>();
+
+    var entidade = context.Model
+        .FindEntityType(typeof(ArmazenamentoFisico));
+
+    foreach (var propriedade in entidade!.GetProperties())
+    {
+        Console.WriteLine($"Propriedade: {propriedade.Name} | Coluna: {propriedade.GetColumnName()}");
+    }
+
+    foreach (var relacionamento in entidade.GetForeignKeys())
+    {
+        Console.WriteLine(
+            $"Relacionamento: {string.Join(", ", relacionamento.Properties.Select(p => p.Name))}");
+    }
+}
 
 app.MapPost("/auth/login", async (
     HttpContext context,
@@ -149,25 +173,25 @@ app.MapPost("/auth/login", async (
 
 
 // CÓDIGO PARA TESTAR A VALIDADE DO LOGIN
-using (var scope = app.Services.CreateScope())
-{
-    var usuarioService = scope.ServiceProvider
-        .GetRequiredService<UsuarioService>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var usuarioService = scope.ServiceProvider
+//        .GetRequiredService<UsuarioService>();
 
-    var loginValido = usuarioService.ValidarLogin(
-        "teste.cadastro@example.com",
-        "SenhaTeste123"
-    );
+//    var loginValido = usuarioService.ValidarLogin(
+//        "teste.cadastro@example.com",
+//        "SenhaTeste123"
+//    );
 
-    Console.WriteLine($"Login válido: {loginValido}");
+//    Console.WriteLine($"Login válido: {loginValido}");
 
-    var senhaIncorreta = usuarioService.ValidarLogin(
-        "teste.cadastro@example.com",
-        "SenhaErrada"
-    );
+//    var senhaIncorreta = usuarioService.ValidarLogin(
+//        "teste.cadastro@example.com",
+//        "SenhaErrada"
+//    );
 
-    Console.WriteLine($"Senha incorreta aceita: {senhaIncorreta}");
-}
+//    Console.WriteLine($"Senha incorreta aceita: {senhaIncorreta}");
+//}
 //
 
 // CODIGO PARA TESTAR CADASTRO DE FUNCIONARIO

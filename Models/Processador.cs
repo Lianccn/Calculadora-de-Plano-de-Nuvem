@@ -6,6 +6,7 @@
         public string Nome { get; set; } = string.Empty;
         public int Nucleos { get; set; }
         public int Threads { get; set; }
+        public decimal Preco { get; set; }
         public List<InfraAtual> InfraestruturasAtuais { get; set; } = new();
         public List<InfraFisico> InfraestruturasFisicas { get; set; } = new();
     }

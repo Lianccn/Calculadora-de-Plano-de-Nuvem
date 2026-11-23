@@ -22,7 +22,9 @@
         public TipoEquipamento TipoEquipamento { get; set; }
         public string Fabricante { get; set; } = string.Empty;
         public string Modelo { get; set; } = string.Empty;
-        public int Memoria { get; set; }
+        public int MemoriaRamId { get; set; }
+        public MemoriaRam MemoriaRam { get; set; } = null!;
+        public int QuantidadeModulos { get; set; }
         public TipoAlimentacao Alimentacao { get; set; }
         public bool Nobreak { get; set; }
         public string LicencaSistema { get; set; } = string.Empty;
